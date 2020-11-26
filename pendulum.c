@@ -8,14 +8,14 @@
 struct timeval tv;
 
 struct System {
-    double length;
-    double M;
-    double m;
-    double x;
-    double dx;
-    double alpha;
-    double dalpha;
-    double Energy;
+	double length;
+	double M;
+	double m;
+	double x;
+	double dx;
+	double alpha;
+	double dalpha;
+	double Energy;
 } sys;
 
 
@@ -131,12 +131,12 @@ void init_gfx(int *c, char **v)
 int main(int c, char **v)
 {
 	sys.length = 2;
-    sys.M=5;
-    sys.m=1;
+	sys.M=5;
+	sys.m=1;
 	sys.x=0;
 	sys.dx=0;
 	sys.alpha = atan2(-1, -1);
-    sys.dalpha = 0.0;
+	sys.dalpha = 0.0;
 
 	gettimeofday(&tv, 0);
 	init_gfx(&c, v);
