@@ -125,7 +125,7 @@ int main(int c, char **v)
 	sys.M = 5;
 	sys.m = 1;
 	sys.d = 1;
-	state.x = -1;
+	state.x = -1.5;
 	state.dx = 0;
 	state.alpha = 30.0/180*3.14;
 	/* state.alpha = 3.14-0.5; */
