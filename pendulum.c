@@ -66,10 +66,14 @@ void draw(double x,double alpha){
 	glEnd();
 
 	// position
-	glRasterPos2f(sx-1*scale+10, sy+0.5*scale);
-	char charray[200];
-	sprintf(charray, "x=%2.2f", x);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, charray);
+	/* glRasterPos2f(sx-1*scale+10, sy+0.5*scale); */
+	/* char charray[200]; */
+	/* sprintf(charray, "x=%2.2f", x); */
+	/* glutBitmapString(GLUT_BITMAP_HELVETICA_18, charray); */
+
+	/* glRasterPos2f(sx-1*scale+10, sy+0.5*scale-20); */
+	/* sprintf(charray, "a=%2.2f", alpha); */
+	/* glutBitmapString(GLUT_BITMAP_HELVETICA_18, charray); */
 
 	glFlush();
 
