@@ -1,7 +1,5 @@
 #include <stdlib.h>
 #include <math.h>
-#include <GL/glut.h>
-#include <GL/gl.h>
 #include <sys/time.h>
 #include <curses.h>
 
