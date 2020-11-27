@@ -3,143 +3,129 @@
 #include <sys/time.h>
 #include <curses.h>
 
-/* #define g -9.8 */
-#define g -10
+#define g -9.8
+#define PI 3.14
 
 typedef struct {
-	double l;
-	double M;
-	double m;
-	double d;
+	double l, M, m, d;
 } System;
 
-typedef struct {
-	double x;
-	double dx;
-	double alpha;
-	double dalpha;
-} State;
-
-double elappsed(struct timeval * tv) {
+double elappsed(struct timeval * t) {
 	struct timeval now;
 	gettimeofday(&now, 0);
-	int ret = (now.tv_sec - tv->tv_sec) * 1000000
-		+ now.tv_usec - tv->tv_usec;
-	*tv = now;
+	int ret = (now.tv_sec - t->tv_sec) * 1.e6
+		+ now.tv_usec - t->tv_usec;
+	*t = now;
 	return ret / 1.e6;
 }
 
-void draw(State state, System sys){
+void draw(double * s,System sys){
 
 	/* screen position */
-	int max_x, max_y;
-	getmaxyx(stdscr, max_y, max_x);
+	int m_x, _;
+	getmaxyx(stdscr, _, m_x);
 
-	double sx = max_x/4*state.x+max_x/2;
+	double sx = m_x/4*s[0]+m_x/2;
 	double sy = 30;
-	double length = sys.l*10;
-
+	double l = sys.l*10;
+	double ca = cos(s[2]);
+	double sa = sin(s[2]);
 	clear();
 
-	mvprintw(0,0, "x=%3.3f m",state.x);
+	mvprintw(0,0, "x=%3.2f m",s[0]);
 	mvprintw(1,0, ".");
-	mvprintw(2,0, "x=%3.3f m/s",state.dx);
-	mvprintw(3,0, "α=%3.3f rad",state.alpha);
+	mvprintw(2,0, "x=%3.2f m/s",s[1]);
+	mvprintw(3,0, "α=%3.2f rad",s[2]);
 	mvprintw(4,0, ".");
-	mvprintw(5,0, "α=%3.3f rad/s",state.dalpha);
+	mvprintw(5,0, "α=%3.2f rad/s",s[3]);
 
 	/* ground */
 	move((int) sy+2,0);
-	hline(ACS_HLINE, max_x);
+	hline(ACS_HLINE, m_x);
 	for(float i = -2;i<2;i+=0.5){
-		mvprintw(sy+3,max_x/4*i+max_x/2,"|",i);
-		mvprintw(sy+4,max_x/4*i+max_x/2,"%.2f",i);
+		mvprintw(sy+3,m_x/4*i+m_x/2,"|",i);
+		mvprintw(sy+4,m_x/4*i+m_x/2,"%.2f",i);
 	}
 
-
 	/* cart */
-	mvprintw((int) sy-3,(int) sx-3, " ----- ");
-	mvprintw((int) sy-2,(int) sx-3, "|     |");
-	mvprintw((int) sy-1,(int) sx-3, "|  M  |");
-	mvprintw((int) sy  ,(int) sx-3, "|     |");
-	mvprintw((int) sy+1,(int) sx-3, " o---o ");
+	mvprintw( sy-3, sx-3, " ----- ");
+	mvprintw( sy-2, sx-3, "|     |");
+	mvprintw( sy-1, sx-3, "|  M  |");
+	mvprintw( sy  , sx-3, "|     |");
+	mvprintw( sy+1, sx-3, " o---o ");
 
 	/* rod */
 	for(float i = 0.1;i<1;i+=0.01){
-		mvprintw(floor(sy +  i*length * cos(state.alpha)),floor(sx + i*length * sin(state.alpha)),"x");
+		mvprintw(floor(sy +  i*l * ca),floor(sx + i*l * sa),"x");
 	}
-
-	mvprintw(-2+floor(sy +  length * cos(state.alpha)),floor(sx + length * sin(state.alpha))-2, " --- ");
-	mvprintw(-1+floor(sy +  length * cos(state.alpha)),floor(sx + length * sin(state.alpha))-2, "/   \\");
-	mvprintw(   floor(sy +  length * cos(state.alpha)),floor(sx + length * sin(state.alpha))-2, "| m |");
-	mvprintw( 1+floor(sy +  length * cos(state.alpha)),floor(sx + length * sin(state.alpha))-2, "\\   /");
-	mvprintw( 2+floor(sy +  length * cos(state.alpha)),floor(sx + length * sin(state.alpha))-2, " --- ");
+	sy = floor(sy +  l * ca);
+	sx = floor(sx + l * sa);
+	mvprintw(sy -2,sx-2, " --- ");
+	mvprintw(sy -1,sx-2, "/   \\");
+	mvprintw(sy   ,sx-2, "| m |");
+	mvprintw(sy +1,sx-2, "\\   /");
+	mvprintw(sy +2,sx-2, " --- ");
 	refresh();
 }
 
-void physics(State *state,System *sys,double dt,double u){
+void physics(double * s,uint8_t sSize,System sys,double dt,double u){
 
 	/* cart & pendulum */
-	double cA = cos(state->alpha);
-	double sA = sin(state->alpha);
-	double l = sys->l;
-	double M = sys->M;
-	double m = sys->m;
-	double D = m*l*l*(M+m*(1-cA*cA));
-	double sda = state->dalpha;
-	double sdx = state->dx;
-	double d = sys->d;
+	double x = s[0];
+	double dx = s[1];
+	double a = s[2];
+	double da = s[3];
 
+	double ca = cos(a);
+	double sa = sin(a);
+	double l = sys.l;
+	double M = sys.M;
+	double m = sys.m;
+	double D = m*l*l*(M+m*(1-ca*ca));
+	double d = sys.d;
 	/* double k[4] = { -10,-22,315,123}; */
-	if(abs(state->alpha-3.14)<0.6){
-		double k[4] = {-100.000,-183.179,1683.180,646.613};
-		u += (-k[0])*state->x + (-k[1])*state->dx + (-k[2])*(state->alpha-3.14) + (-k[3])*state->dalpha;
+
+	if(fabsf(a-PI)<0.6){
+		double k[4] = {-100.0,-183.2,1683.0,646.6};
+		u += (-k[0])*s[0] + (-k[1])*s[1] + (-k[2])*(s[2]-PI) + (-k[3])*s[3];
 	}
 	else {
 		/* swing up */
-		double k[4] = {20.000,0.0,-10,-10};
-		double Wref=2*m*g*l;
-		double W=m*l*l/2*sda*sda/2+m*g*l*(cA+1);
-		double umax=1;
-		u += umax*(W-Wref)*(sda*cA>0?-1:1);
+		double k[4] = {20.0,0.0,-10,-10};
+		double Wr=2*m*g*l;
+		double W=m*l*l/2*da*da/2+m*g*l*(ca+1);
+		u += 2*(W-Wr)*(da*ca>0?-1:1);
 	}
 
-	double ddx = (1/D)*(-m*m*l*l*g*cA*sA + m*l*l*(m*l*sda*sda*sA - d *sdx))+m*l*l*(1/D)*u;
-	state->dx+=ddx*dt;
-	state->x+=state->dx*dt;
+	/* euler */
+	double ddx = (1/D)*(-m*m*l*l*g*ca*sa + m*l*l*(m*l*da*da*sa - d *dx))+m*l*l*(1/D)*u;
+	s[1]+=ddx*dt;
+	s[0]+=s[1]*dt;
 
-	double ddalpha = (1/D)*((m+M)*m*g*l*sA - m*l*cA*(m*l*sda*sda*sA - d* sdx)) -m*l*cA*(1/D)*u;
-	state->dalpha += ddalpha*dt;
-	state->alpha += state->dalpha*dt;
+	double ddalpha = (1/D)*((m+M)*m*g*l*sa - m*l*ca*(m*l*da*da*sa - d* dx)) -m*l*ca*(1/D)*u;
+	s[3]+=ddalpha*dt;
+	s[2]+=s[3]*dt;
+
 }
 
 int main(int c, char **v)
 {
+	uint8_t sSize = 4;
+	System sys = {2,5,1,1}; // l M m d
+	double s[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
 
-	State state;
-	System sys;
-
-	sys.l = 2;
-	sys.M = 5;
-	sys.m = 1;
-	sys.d = 1;
-	state.x = -1.5;
-	state.dx = 0;
-	state.alpha = 30.0/180*3.14;
-	/* state.alpha = 3.14-0.5; */
-	state.dalpha = 0.0;
-	struct timeval tv;
-	gettimeofday(&tv, 0);
+	/* state.alpha = PI-0.5; */
+	struct timeval t;
+	gettimeofday(&t, 0);
 
 	initscr();
 	curs_set(FALSE);
 
 	for(;;){
-		double us = elappsed(&tv);
-		physics(&state,&sys,us,0);
-
-		draw(state,sys);
-        usleep(2000);
+		double us = elappsed(&t);
+		physics(s,sSize,sys,us,0);
+		draw(s,sys);
+        usleep(20000);
 	}
 	return 0;
 }
