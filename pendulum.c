@@ -6,11 +6,11 @@
 #define g -9.8
 #define PI 3.14
 
-typedef struct {
+typedef struct{
 	double l,M,m,d;
 } Sys;
 
-double tim(struct timeval * t) {
+double tim(struct timeval * t){
 	struct timeval n;
 	gettimeofday(&n,0);
 	int r=(n.tv_sec-t->tv_sec)*1.e6+n.tv_usec-t->tv_usec;
@@ -88,7 +88,7 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u){
 		double k[4]={-100.0,-183.2,1683.0,646.6};
 		u+=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3];
 	}
-	else {
+	else{
 		/* swing up */
 		double k[4]={20.0,0.0,-10,-10};
 		double Wr=2*m*g*l;
@@ -107,8 +107,7 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u){
 
 }
 
-main(int c, char **v)
-{
+main(int c, char **v){
 	uint8_t size = 4;
 	Sys sys = {2,5,1,1}; // l M m d
 	double s[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
