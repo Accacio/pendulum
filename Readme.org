@@ -8,14 +8,14 @@ To test our code we need to build it, so we use a simple =makefile=
 #+begin_src makefile :tangle makefile :results none
 # Pendulum
 compile:
-    gcc src/pendulum.c -Os -lncurses -lm -o pendulum
+	gcc src/pendulum.c -Os -lncurses -lm -o pendulum
 
 run:
-    @./pendulum
+	@./pendulum
 
 clean:
-    @ if [ -f pendulum ]; then rm pendulum; fi;
-    @echo "Cleaned"
+	@ if [ -f pendulum ]; then rm pendulum; fi;
+	@echo "Cleaned"
 
 # end
 #+end_src
