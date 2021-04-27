@@ -67,7 +67,7 @@ draw(double * s,Sys sys){
 	refresh();
 }
 
-physics(double * s,uint8_t size,Sys sys,double dt,double u){
+physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 
 	/* cart & pendulum */
 	double x=s[0];

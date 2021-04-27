@@ -1,13 +1,12 @@
-##
 # Pendulum
-#
-# @file
-# @version 0.1
-
 compile:
-	gcc pendulum.c -Os -lncurses -lm -lGL -lglut -o pendulum
+	gcc src/pendulum.c -Os -lncurses -lm -o pendulum
 
 run:
 	@./pendulum
+
+clean:
+	@ if [ -f pendulum ]; then rm pendulum; fi;
+	@echo "Cleaned"
 
 # end
