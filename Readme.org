@@ -2,7 +2,7 @@
 #+OPTIONS: toc:nil
 Implementation using curses
 - example of controlled ::
-#+HTML:  <p align="center"><<a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="300" title="click to watch" /></a></p>
+#+HTML:  <p align="center"><a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="300" title="click to watch" /></a></p>
 * Dependencies
 ncurses
 ** installation
