@@ -3,6 +3,13 @@
 Implementation using curses
 - example of controlled ::
 #+HTML:  <a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="300" title="click to watch" /></a>
+* Dependencies
+ncurses
+** installation
+*** Ubuntu
+#+begin_src bash
+sudo apt install libncurses5-dev
+#+end_src
 * Testing
 To test our code we need to build it, so we use a simple =makefile=
 #+begin_src makefile :tangle makefile :results none
