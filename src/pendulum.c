@@ -129,7 +129,8 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 main(int c, char **v){
     uint8_t size = 4;
     Sys sys = {2,5,1,1}; // l M m d
-    double s[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
+    double sInit[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
+    double s[4] = {sInit[0],sInit[1],sInit[2],sInit[3]};
 
     struct timeval t;
     gettimeofday(&t, 0);
@@ -144,10 +145,17 @@ main(int c, char **v){
             ch = getchar();
             if(ch==68){u=-20;} // nudge left
             if(ch==67){u=+20;} // nudge right
+            if(ch==13){
+                u=0;
+                s[0] =sInit[0];
+                s[1] =sInit[1];
+                s[2] =sInit[2];
+                s[3] =sInit[3];
+            } // Restart
         }
         u*=0.9;
         physics(s,size,sys,tim(&t),u);
-        draw(s,sys);
+        draw(s,sys,u);
         usleep(20000);
     }
 }
