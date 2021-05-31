@@ -33,7 +33,7 @@ return 1;
 return 0;
 }
 
-draw(double * s,Sys sys){
+draw(double * s,Sys sys,double u){
 
     /* screen position */
     int mx, _;
@@ -52,6 +52,7 @@ draw(double * s,Sys sys){
     mvprintw(3,0,"α=%3.2f rad",s[2]);
     mvprintw(4,0,".");
     mvprintw(5,0,"α=%3.2f rad/s",s[3]);
+    mvprintw(6,0,"u=%3.2f ",u);
 
     /* ground */
     move((int) y+2,0);
