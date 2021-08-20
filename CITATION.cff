@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "NOGUEIRA"
+  given-names: "Rafael Accácio"
+  orcid: "https://orcid.org/0000-0001-9341-1877"
+title: "pendulum"
+version: 1.0.0
+doi: 10.5281/zenodo.1234
+date-released: 2021-08-20
+url: "https://github.com/Accacio/pendulum"
