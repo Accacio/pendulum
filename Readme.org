@@ -1,5 +1,7 @@
 #+TITLE: Pendulum
 #+OPTIONS: toc:nil
+#+HTML: <p align="center"><a href="https://zenodo.org/badge/latestdoi/316294231"><img src="https://zenodo.org/badge/316294231.svg" alt="DOI"></a></p>
+
 Implementation using curses
 - example of controlled ::
 #+HTML:  <p align="center"><a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="300" title="click to watch" /></a></p>
