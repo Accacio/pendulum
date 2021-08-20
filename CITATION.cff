@@ -5,7 +5,7 @@ authors:
   given-names: "Rafael Accácio"
   orcid: "https://orcid.org/0000-0001-9341-1877"
 title: "pendulum"
-version: 1.0.0
-doi: 10.5281/zenodo.1234
+version: 0.0.1
+doi: 10.5281/zenodo.5227166
 date-released: 2021-08-20
 url: "https://github.com/Accacio/pendulum"
