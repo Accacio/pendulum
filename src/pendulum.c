@@ -241,6 +241,9 @@ main(int c, char **v){
                 s[2] =sInit[2];
                 s[3] =sInit[3];
             } // Restart
+            if(ch==27){
+                break;
+            }
         }
         u=control(s,size,sys,u);
         physics(s,size,sys,tim(&t),u);
@@ -248,6 +251,7 @@ main(int c, char **v){
         usleep(20000);
     }
     tcc_delete(tccState);
+    endwin();
     return 0;
 }
 /* Main Loop:1 ends here */
