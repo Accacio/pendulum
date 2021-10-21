@@ -1,7 +1,7 @@
 # [[file:Readme.org::*Testing][Testing:1]]
 # Pendulum
 compile:
-	gcc src/pendulum.c -Os -lncursesw -I/usr/include/ncursesw -lm -o pendulum
+	gcc src/pendulum.c -Os -lncursesw -I/usr/include/ncursesw -lm -ltcc -o pendulum -ldl
 
 run:
 	@./pendulum

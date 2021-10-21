@@ -4,6 +4,43 @@
 #include <sys/time.h>
 #include <curses.h>
 #include <locale.h>
+#include <libtcc.h>
+
+char my_program[] =
+    "#include <tcclib.h>\n"
+    "#include <math.h>\n"
+    "#define PI 3.14\n"
+    "#define g -9.8\n"
+    "typedef struct{"
+    "    double l,M,m,d;"
+    "} Sys;"
+    ""
+    "double control(double * s,uint8_t size,Sys sys,double u)"
+    "{"
+    "double x=s[0];"
+    "double dx=s[1];"
+    "double a=s[2];"
+    "double da=s[3];"
+    ""
+    "double ca=cos(a);"
+    "double sa=sin(a);"
+    "double l=sys.l;"
+    "double M=sys.M;"
+    "double m=sys.m;"
+    "double D=m*l*l*(M+m*(1-ca*ca));"
+    "double d=sys.d;"
+    "if(fabsf(a-PI)<0.6){"
+    "double k[4]={-100.0,-183.2,1683.0,646.6};"
+    "u=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3];"
+    "}"
+    "else{"
+    "double k[4]={20.0,0.0,-10,-10};"
+    "double Wr=2*m*g*l;"
+    "double W=m*l*l/2*da*da/2+m*g*l*(ca+1);"
+    "u=2*(W-Wr)*(da*ca>0?-1:1);"
+    "}"
+    "return u;"
+    "}";
 /* The Code:1 ends here */
 
 /* [[file:../Readme.org::*The Code][The Code:2]] */
@@ -60,6 +97,7 @@ draw(double * s,Sys sys,double u){
     mvprintw(1,0,"ẋ=%3.2f m/s",s[1]);
     mvprintw(2,0,"a=%3.2f rad",s[2]);
     mvprintw(3,0,"ȧ=%3.2f rad/s",s[3]);
+    mvprintw(4,0,"u=%3.2f ",u);
 
     mvprintw(0,mx-16,"← to nudge left",s[0]);
     mvprintw(1,mx-16,"→ to nudge right",s[0]);
@@ -117,18 +155,18 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
     /* double k[4] = { -10,-22,315,123}; */
 
     /* comment out to control manually */
-    if(fabsf(a-PI)<0.6){
-        /* control around upright linearization point */
-        double k[4]={-100.0,-183.2,1683.0,646.6};
-        u+=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3];
-    }
-    else{
-        /* swing up */
-        double k[4]={20.0,0.0,-10,-10};
-        double Wr=2*m*g*l;
-        double W=m*l*l/2*da*da/2+m*g*l*(ca+1);
-        u+=2*(W-Wr)*(da*ca>0?-1:1);
-    }
+    /* if(fabsf(a-PI)<0.6){ */
+    /*     /\* control around upright linearization point *\/ */
+    /*     double k[4]={-100.0,-183.2,1683.0,646.6}; */
+    /*     u+=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3]; */
+    /* } */
+    /* else{ */
+    /*     /\* swing up *\/ */
+    /*     double k[4]={20.0,0.0,-10,-10}; */
+    /*     double Wr=2*m*g*l; */
+    /*     double W=m*l*l/2*da*da/2+m*g*l*(ca+1); */
+    /*     u+=2*(W-Wr)*(da*ca>0?-1:1); */
+    /* } */
 /* Physics Simulation:1 ends here */
 
 /* [[file:../Readme.org::*Physics Simulation][Physics Simulation:2]] */
@@ -148,6 +186,22 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:1]] */
 main(int c, char **v){
+    TCCState *tccState;
+
+    tccState = tcc_new();
+    tcc_set_output_type(tccState, TCC_OUTPUT_MEMORY);
+
+    double (*control)(double *,uint8_t,Sys,double)= 0;
+
+    if(!control){
+        if(tcc_compile_string(tccState, my_program)>0){
+            return 2;
+        };
+        tcc_relocate(tccState, TCC_RELOCATE_AUTO);
+        control = tcc_get_symbol(tccState, "control");
+    }
+
+
     setlocale(LC_ALL, "");
 
     uint8_t size = 4;
@@ -188,11 +242,12 @@ main(int c, char **v){
                 s[3] =sInit[3];
             } // Restart
         }
-        u*=0.9;
+        u=control(s,size,sys,u);
         physics(s,size,sys,tim(&t),u);
         draw(s,sys,u);
         usleep(20000);
     }
+    tcc_delete(tccState);
     return 0;
 }
 /* Main Loop:1 ends here */
