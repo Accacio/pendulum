@@ -1,6 +1,7 @@
+# [[file:Readme.org::*Testing][Testing:1]]
 # Pendulum
 compile:
-	gcc src/pendulum.c -Os -lncurses -lm -o pendulum
+	gcc src/pendulum.c -Os -lncursesw -I/usr/include/ncursesw -lm -o pendulum
 
 run:
 	@./pendulum
@@ -10,3 +11,4 @@ clean:
 	@echo "Cleaned"
 
 # end
+# Testing:1 ends here

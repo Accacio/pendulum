@@ -18,7 +18,7 @@ To test our code we need to build it, so we use a simple =makefile=
 #+begin_src makefile :tangle makefile :results none
 # Pendulum
 compile:
-	gcc src/pendulum.c -Os -lncurses -lm -o pendulum
+	gcc src/pendulum.c -Os -lncursesw -I/usr/include/ncursesw -lm -o pendulum
 
 run:
 	@./pendulum
@@ -61,6 +61,7 @@ $TERMINAL -e make run
 #include <math.h>
 #include <sys/time.h>
 #include <curses.h>
+#include <locale.h>
 #+end_src
 
 #+begin_src C :tangle src/pendulum.c :main no
