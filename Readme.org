@@ -1,5 +1,6 @@
 #+TITLE: Pendulum
 #+OPTIONS: toc:nil
+#+PROPERTY: header-args :comments yes
 #+HTML: <p align="center"><a href="https://zenodo.org/badge/latestdoi/316294231"><img src="https://zenodo.org/badge/316294231.svg" alt="DOI"></a></p>
 
 Implementation using curses
