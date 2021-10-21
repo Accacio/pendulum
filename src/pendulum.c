@@ -166,8 +166,20 @@ main(int c, char **v){
     for(;;){
         if (kbhit()){
             ch = getchar();
-            if(ch==68){u=-20;} // nudge left
-            if(ch==67){u=+20;} // nudge right
+            if(ch==68){s[2]+=30./180*PI;} // nudge left
+            if(ch==67){s[2]-=30./180*PI;} // nudge right
+            if(ch==65){
+                sInit[0] =0;
+                sInit[1] =0;
+                sInit[2] =160./180*PI;
+                sInit[3] =0;
+            }
+            if(ch==66){
+                sInit[0] =0;
+                sInit[1] =0;
+                sInit[2] =30.0/180*PI;
+                sInit[3] =0;
+            }
             if(ch==13){
                 u=0;
                 s[0] =sInit[0];
@@ -181,5 +193,6 @@ main(int c, char **v){
         draw(s,sys,u);
         usleep(20000);
     }
+    return 0;
 }
 /* Main Loop:1 ends here */
