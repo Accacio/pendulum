@@ -1,15 +1,23 @@
+/* [[file:../Readme.org::*The Code][The Code:1]] */
 #include <stdlib.h>
 #include <math.h>
 #include <sys/time.h>
 #include <curses.h>
+#include <locale.h>
+/* The Code:1 ends here */
 
+/* [[file:../Readme.org::*The Code][The Code:2]] */
 #define g -9.8
 #define PI 3.14
+/* The Code:2 ends here */
 
+/* [[file:../Readme.org::*The Code][The Code:3]] */
 typedef struct{
     double l,M,m,d;
 } Sys;
+/* The Code:3 ends here */
 
+/* [[file:../Readme.org::*The Code][The Code:4]] */
 double tim(struct timeval * t){
     struct timeval n;
     gettimeofday(&n,0);
@@ -32,27 +40,32 @@ if(FD_ISSET(0,&read_fd))
 return 1;
 return 0;
 }
+/* The Code:4 ends here */
 
+/* [[file:../Readme.org::*Drawing][Drawing:1]] */
 draw(double * s,Sys sys,double u){
 
     /* screen position */
-    int mx, _;
-    getmaxyx(stdscr,_,mx);
+    int mx, my;
+    getmaxyx(stdscr,my,mx);
 
     double x=mx/4*s[0]+mx/2;
-    double y=30;
-    double l=sys.l*10;
+    double y=my/2+2;
+    double l=sys.l*my/4;
     double ca=cos(s[2]);
     double sa=sin(s[2]);
     clear();
 
     mvprintw(0,0,"x=%3.2f m",s[0]);
-    mvprintw(1,0,".");
-    mvprintw(2,0,"x=%3.2f m/s",s[1]);
-    mvprintw(3,0,"α=%3.2f rad",s[2]);
-    mvprintw(4,0,".");
-    mvprintw(5,0,"α=%3.2f rad/s",s[3]);
-    mvprintw(6,0,"u=%3.2f ",u);
+    mvprintw(1,0,"ẋ=%3.2f m/s",s[1]);
+    mvprintw(2,0,"a=%3.2f rad",s[2]);
+    mvprintw(3,0,"ȧ=%3.2f rad/s",s[3]);
+
+    mvprintw(0,mx-16,"← to nudge left",s[0]);
+    mvprintw(1,mx-16,"→ to nudge right",s[0]);
+    mvprintw(2,mx-16,"⮠ to restart",s[1]);
+
+
 
     /* ground */
     move((int) y+2,0);
@@ -63,26 +76,28 @@ draw(double * s,Sys sys,double u){
     }
 
     /* cart */
-    mvprintw(y-3,x-3," ----- ");
-    mvprintw(y-2,x-3,"|     |");
-    mvprintw(y-1,x-3,"|  M  |");
-    mvprintw(y,x-3,"|     |");
-    mvprintw(y+1,x-3," o---o ");
+    mvprintw(y-3,x-4,"┌───────┐");
+    mvprintw(y-2,x-4,"|       │");
+    mvprintw(y-1,x-4,"|   M   │");
+    mvprintw(y,x-4  ,"|       │");
+    mvprintw(y+1,x-4,"└o-----o┘");
 
     /* rod */
     for(float i = 0.1;i<1;i+=0.01){
-        mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"x");
+        mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"│");
     }
     y = floor(y+l*ca);
     x = floor(x+l*sa);
-    mvprintw(y-2,x-2," --- ");
-    mvprintw(y-1,x-2,"/   \\");
-    mvprintw(y,x-2,"| m |");
-    mvprintw(y+1,x-2,"\\   /");
-    mvprintw(y+2,x-2," --- ");
+    mvprintw(y-2,x-2,"");
+    mvprintw(y-1,x-2,"┌───┐");
+    mvprintw(y,x-2  ,"| m |");
+    mvprintw(y+1,x-2,"└───┘");
+    mvprintw(y+2,x-2,"");
     refresh();
 }
+/* Drawing:1 ends here */
 
+/* [[file:../Readme.org::*Physics Simulation][Physics Simulation:1]] */
 physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 
     /* cart & pendulum */
@@ -114,7 +129,9 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
         double W=m*l*l/2*da*da/2+m*g*l*(ca+1);
         u+=2*(W-Wr)*(da*ca>0?-1:1);
     }
+/* Physics Simulation:1 ends here */
 
+/* [[file:../Readme.org::*Physics Simulation][Physics Simulation:2]] */
     /* euler */
     double ddx=(1/D)*(-m*m*l*l*g*ca*sa+m*l*l*(m*l*da*da*sa-d*dx))+m*l*l*(1/D)*u;
     s[1]+=ddx*dt;
@@ -123,10 +140,16 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
     double dda = (1/D)*((m+M)*m*g*l*sa-m*l*ca*(m*l*da*da*sa-d*dx))-m*l*ca*(1/D)*u;
     s[3]+=dda*dt;
     s[2]+=s[3]*dt;
+/* Physics Simulation:2 ends here */
 
+/* [[file:../Readme.org::*Physics Simulation][Physics Simulation:3]] */
 }
+/* Physics Simulation:3 ends here */
 
+/* [[file:../Readme.org::*Main Loop][Main Loop:1]] */
 main(int c, char **v){
+    setlocale(LC_ALL, "");
+
     uint8_t size = 4;
     Sys sys = {2,5,1,1}; // l M m d
     double sInit[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
@@ -159,3 +182,4 @@ main(int c, char **v){
         usleep(20000);
     }
 }
+/* Main Loop:1 ends here */

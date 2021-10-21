@@ -226,6 +226,13 @@ main(int c, char **v){
             ch = getchar();
             if(ch==68){u=-20;} // nudge left
             if(ch==67){u=+20;} // nudge right
+            if(ch==13){
+                u=0;
+                s[0] =sInit[0];
+                s[1] =sInit[1];
+                s[2] =sInit[2];
+                s[3] =sInit[3];
+            } // Restart
         }
         u*=0.9;
         physics(s,size,sys,tim(&t),u);
