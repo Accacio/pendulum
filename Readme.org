@@ -11,7 +11,7 @@ ncurses
 ** installation
 *** Ubuntu
 #+begin_src bash
-sudo apt install libncurses5-dev
+sudo apt install libncursesw5-dev libtcc
 #+end_src
 * Testing
 To test our code we need to build it, so we use a simple =makefile=
