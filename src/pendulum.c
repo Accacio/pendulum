@@ -213,7 +213,7 @@ main(int c, char **v){
                 sInit[2] =30.0/180*PI;
                 sInit[3] =0;
             }
-            if(ch==13){
+            if(ch==10){
                 u=0;
                 state.x =sInit[0];
                 state.dx =sInit[1];
