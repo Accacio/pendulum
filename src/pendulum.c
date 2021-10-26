@@ -187,6 +187,22 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 /* [[file:../Readme.org::*Main Loop][Main Loop:1]] */
 main(int c, char **v){
     TCCState *tccState;
+    char source_file[10] = "control.c";
+    FILE *source;
+    int fileSize;
+    char *fileChars;
+
+    source=fopen(source_file, "r");
+    if(!source){
+       exit(EXIT_FAILURE) ;
+    }
+    fseek(source,0,SEEK_END);
+    fileSize=ftell(source);
+    fileChars = (char*) realloc(fileChars,sizeof(char)*fileSize+1);
+    fseek(source,0,SEEK_SET);
+    fread((char*) fileChars,fileSize,1,source);
+    fclose(source);
+
 
     tccState = tcc_new();
     tcc_set_output_type(tccState, TCC_OUTPUT_MEMORY);
@@ -194,8 +210,8 @@ main(int c, char **v){
     double (*control)(double *,uint8_t,Sys,double)= 0;
 
     if(!control){
-        if(tcc_compile_string(tccState, my_program)>0){
-            return 2;
+        if(tcc_compile_string(tccState, fileChars)>0){
+            exit(EXIT_FAILURE);
         };
         tcc_relocate(tccState, TCC_RELOCATE_AUTO);
         control = tcc_get_symbol(tccState, "control");
