@@ -155,22 +155,6 @@ physics(State * state,Sys sys,double dt,double u) {
     double m=sys.m;
     double D=m*l*l*(M+m*(1-ca*ca));
     double d=sys.d;
-
-    /* double k[4] = { -10,-22,315,123}; */
-
-    /* comment out to control manually */
-    /* if(fabsf(a-PI)<0.6){ */
-    /*     /\* control around upright linearization point *\/ */
-    /*     double k[4]={-100.0,-183.2,1683.0,646.6}; */
-    /*     u+=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3]; */
-    /* } */
-    /* else{ */
-    /*     /\* swing up *\/ */
-    /*     double k[4]={20.0,0.0,-10,-10}; */
-    /*     double Wr=2*m*g*l; */
-    /*     double W=m*l*l/2*da*da/2+m*g*l*(ca+1); */
-    /*     u+=2*(W-Wr)*(da*ca>0?-1:1); */
-    /* } */
 /* Physics Simulation:1 ends here */
 
 /* [[file:../Readme.org::*Physics Simulation][Physics Simulation:2]] */
