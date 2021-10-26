@@ -205,8 +205,8 @@ main(int c, char **v){
     for(;;){
         ch = getch();
         if (ch!=ERR){
-            if(ch==68){state.a +=30./180*PI;} // nudge left
-            if(ch==67){state.a-=30./180*PI;} // nudge right
+            if(ch==68){state.dx-=1;} // nudge left
+            if(ch==67){state.dx+=1;} // nudge right
             if(ch==65){
                 sInit[0] =0;
                 sInit[1] =0;
