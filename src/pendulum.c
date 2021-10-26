@@ -5,47 +5,32 @@
 #include <curses.h>
 #include <locale.h>
 #include <libtcc.h>
+#include <string.h>
 
-char my_program[] =
-    "#include <tcclib.h>\n"
-    "#include <math.h>\n"
-    "#define PI 3.14\n"
-    "#define g -9.8\n"
-    "typedef struct{"
-    "    double l,M,m,d;"
-    "} Sys;"
-    ""
-    "double control(double * s,uint8_t size,Sys sys,double u)"
-    "{"
-    "double x=s[0];"
-    "double dx=s[1];"
-    "double a=s[2];"
-    "double da=s[3];"
-    ""
-    "double ca=cos(a);"
-    "double sa=sin(a);"
-    "double l=sys.l;"
-    "double M=sys.M;"
-    "double m=sys.m;"
-    "double D=m*l*l*(M+m*(1-ca*ca));"
-    "double d=sys.d;"
-    "if(fabsf(a-PI)<0.6){"
-    "double k[4]={-100.0,-183.2,1683.0,646.6};"
-    "u=(-k[0])*s[0]+(-k[1])*s[1]+(-k[2])*(s[2]-PI)+(-k[3])*s[3];"
-    "}"
-    "else{"
-    "double k[4]={20.0,0.0,-10,-10};"
-    "double Wr=2*m*g*l;"
-    "double W=m*l*l/2*da*da/2+m*g*l*(ca+1);"
-    "u=2*(W-Wr)*(da*ca>0?-1:1);"
-    "}"
-    "return u;"
-    "}";
 /* The Code:1 ends here */
 
 /* [[file:../Readme.org::*The Code][The Code:2]] */
 #define g -9.8
 #define PI 3.14
+
+char preamble[] = "#include <tcclib.h>\n"
+    "#include <math.h>\n"
+    "#define PI 3.14\n"
+    "#define g -9.8\n"
+    "typedef struct{\n"
+    "    double l,M,m,d;\n"
+    "} Sys;\n"
+
+    "typedef struct{"
+    "double x, dx, a, da;"
+    "} State;"
+
+    "double control(State state,uint8_t size,Sys sys,double u)\n"
+    "{\n"
+    ;
+char postamble[] = "return u;\n"
+    "}";
+
 /* The Code:2 ends here */
 
 /* [[file:../Readme.org::*The Code][The Code:3]] */
@@ -186,11 +171,12 @@ main(int c, char **v){
     }
     fseek(source,0,SEEK_END);
     fileSize=ftell(source);
-    fileChars = (char*) realloc(fileChars,sizeof(char)*fileSize+1);
+    fileChars = (char*) realloc(fileChars,sizeof(char)*sizeof(postamble)+sizeof(char)*sizeof(preamble)+sizeof(char)*fileSize+1);
+    strcpy(fileChars, preamble);
     fseek(source,0,SEEK_SET);
-    fread((char*) fileChars,fileSize,1,source);
+    fread((char*) fileChars+sizeof(preamble)-1,fileSize,1,source);
+    strcat((char*)fileChars,postamble);
     fclose(source);
-
 
     tccState = tcc_new();
     tcc_set_output_type(tccState, TCC_OUTPUT_MEMORY);
