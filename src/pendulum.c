@@ -52,6 +52,10 @@ char my_program[] =
 typedef struct{
     double l,M,m,d;
 } Sys;
+
+typedef struct{
+    double x, dx, a, da;
+} State;
 /* The Code:3 ends here */
 
 /* [[file:../Readme.org::*The Code][The Code:4]] */
@@ -80,23 +84,23 @@ return 0;
 /* The Code:4 ends here */
 
 /* [[file:../Readme.org::*Drawing][Drawing:1]] */
-draw(double * s,Sys sys,double u){
+draw(State state,Sys sys,double u){
 
     /* screen position */
     int mx, my;
     getmaxyx(stdscr,my,mx);
 
-    double x=mx/4*s[0]+mx/2;
+    double x=mx/4*state.x+mx/2;
     double y=my/2+2;
     double l=sys.l*my/4;
-    double ca=cos(s[2]);
-    double sa=sin(s[2]);
+    double ca=cos(state.a);
+    double sa=sin(state.a);
     clear();
 
-    mvprintw(0,0,"x=%3.2f m",s[0]);
-    mvprintw(1,0,"ẋ=%3.2f m/s",s[1]);
-    mvprintw(2,0,"a=%3.2f rad",s[2]);
-    mvprintw(3,0,"ȧ=%3.2f rad/s",s[3]);
+    mvprintw(0,0,"x=%3.2f m",state.x);
+    mvprintw(1,0,"ẋ=%3.2f m/s",state.dx);
+    mvprintw(2,0,"a=%3.2f rad",state.a);
+    mvprintw(3,0,"ȧ=%3.2f rad/s",state.da);
     mvprintw(4,0,"u=%3.2f ",u);
 
     mvprintw(0,mx-16,"← to nudge left");
@@ -136,13 +140,13 @@ draw(double * s,Sys sys,double u){
 /* Drawing:1 ends here */
 
 /* [[file:../Readme.org::*Physics Simulation][Physics Simulation:1]] */
-physics(double * s,uint8_t size,Sys sys,double dt,double u) {
+physics(State * state,Sys sys,double dt,double u) {
 
     /* cart & pendulum */
-    double x=s[0];
-    double dx=s[1];
-    double a=s[2];
-    double da=s[3];
+    double x=state->x;
+    double dx=state->dx;
+    double a=state->a;
+    double da=state->da;
 
     double ca=cos(a);
     double sa=sin(a);
@@ -172,12 +176,12 @@ physics(double * s,uint8_t size,Sys sys,double dt,double u) {
 /* [[file:../Readme.org::*Physics Simulation][Physics Simulation:2]] */
     /* euler */
     double ddx=(1/D)*(-m*m*l*l*g*ca*sa+m*l*l*(m*l*da*da*sa-d*dx))+m*l*l*(1/D)*u;
-    s[1]+=ddx*dt;
-    s[0]+=s[1]*dt;
+    state->dx+=ddx*dt;
+    state->x+=state->dx*dt;
 
     double dda = (1/D)*((m+M)*m*g*l*sa-m*l*ca*(m*l*da*da*sa-d*dx))-m*l*ca*(1/D)*u;
-    s[3]+=dda*dt;
-    s[2]+=s[3]*dt;
+    state->da+=dda*dt;
+    state->a+=state->da*dt;
 /* Physics Simulation:2 ends here */
 
 /* [[file:../Readme.org::*Physics Simulation][Physics Simulation:3]] */
@@ -207,7 +211,7 @@ main(int c, char **v){
     tccState = tcc_new();
     tcc_set_output_type(tccState, TCC_OUTPUT_MEMORY);
 
-    double (*control)(double *,uint8_t,Sys,double)= 0;
+    double (*control)(State, Sys,double)= 0;
 
     if(!control){
         if(tcc_compile_string(tccState, fileChars)>0){
@@ -223,7 +227,7 @@ main(int c, char **v){
     uint8_t size = 4;
     Sys sys = {2,5,1,1}; // l M m d
     double sInit[4] = {-1.5, 0.0, 30.0/180*PI, 0.0}; // x dx α dα
-    double s[4] = {sInit[0],sInit[1],sInit[2],sInit[3]};
+    State state = {sInit[0],sInit[1],sInit[2],sInit[3]};
 
     struct timeval t;
     gettimeofday(&t, 0);
@@ -236,8 +240,9 @@ main(int c, char **v){
     for(;;){
         if (kbhit()){
             ch = getchar();
-            if(ch==68){s[2]+=30./180*PI;} // nudge left
-            if(ch==67){s[2]-=30./180*PI;} // nudge right
+
+            if(ch==68){state.a +=30./180*PI;} // nudge left
+            if(ch==67){state.a-=30./180*PI;} // nudge right
             if(ch==65){
                 sInit[0] =0;
                 sInit[1] =0;
@@ -252,18 +257,18 @@ main(int c, char **v){
             }
             if(ch==13){
                 u=0;
-                s[0] =sInit[0];
-                s[1] =sInit[1];
-                s[2] =sInit[2];
-                s[3] =sInit[3];
+                state.x =sInit[0];
+                state.dx =sInit[1];
+                state.a =sInit[2];
+                state.da =sInit[3];
             } // Restart
             if(ch==27){
                 break;
             }
         }
-        u=control(s,size,sys,u);
-        physics(s,size,sys,tim(&t),u);
-        draw(s,sys,u);
+        u=control(state,sys,u);
+        physics(&state,sys,tim(&t),u);
+        draw(state,sys,u);
         usleep(20000);
     }
     tcc_delete(tccState);
