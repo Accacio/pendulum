@@ -184,7 +184,7 @@ main(int c, char **v){
     double (*control)(State, Sys,double)= 0;
 
     if(!control){
-        if(tcc_compile_string(tccState, fileChars)>0){
+        if(tcc_compile_string(tccState, fileChars)<0){
             exit(EXIT_FAILURE);
         };
         tcc_relocate(tccState, TCC_RELOCATE_AUTO);
