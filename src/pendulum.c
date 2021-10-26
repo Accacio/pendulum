@@ -220,7 +220,7 @@ main(int c, char **v){
                 state.a =sInit[2];
                 state.da =sInit[3];
             } // Restart
-            if(ch==27){
+            if(ch==113){
                 break;
             }
         }
