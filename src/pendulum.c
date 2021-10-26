@@ -99,9 +99,9 @@ draw(double * s,Sys sys,double u){
     mvprintw(3,0,"ȧ=%3.2f rad/s",s[3]);
     mvprintw(4,0,"u=%3.2f ",u);
 
-    mvprintw(0,mx-16,"← to nudge left",s[0]);
-    mvprintw(1,mx-16,"→ to nudge right",s[0]);
-    mvprintw(2,mx-16,"⮠ to restart",s[1]);
+    mvprintw(0,mx-16,"← to nudge left");
+    mvprintw(1,mx-16,"→ to nudge right");
+    mvprintw(2,mx-16,"⮠ to restart");
 
 
 
