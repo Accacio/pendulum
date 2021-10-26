@@ -12,6 +12,7 @@
 /* [[file:../Readme.org::*The Code][The Code:2]] */
 #define g -9.8
 #define PI 3.14
+#define deg(x) x/180.*PI
 
 char preamble[] = "#include <tcclib.h>\n"
     "#include <math.h>\n"
@@ -97,8 +98,13 @@ draw(State state,Sys sys,double u){
 
     /* rod */
     for(float i = 0.1;i<1;i+=0.01){
-        mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"│");
+        double absfa=fabsf(state.a);
+        mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"|");
+       if(sa<0&&ca>0.5) mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"/");
+       if(sa>0&&ca>0.5) mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"\\");
+       if(fabsf(ca)<0.1) mvprintw(floor(y+i*l*ca),floor(x+i*l*sa),"-");
     }
+
     y = floor(y+l*ca);
     x = floor(x+l*sa);
     mvprintw(y-2,x-2,"");
