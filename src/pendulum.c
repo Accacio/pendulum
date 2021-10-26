@@ -52,20 +52,6 @@ double tim(struct timeval * t){
     return r / 1.e6;
 }
 
-int kbhit(void) {
-
-struct timeval tv;
-fd_set read_fd;
-tv.tv_sec=0;
-tv.tv_usec=0;
-FD_ZERO(&read_fd);
-FD_SET(0,&read_fd);
-if(select(1, &read_fd, NULL, NULL, &tv) == -1)
-return 0;
-if(FD_ISSET(0,&read_fd))
-return 1;
-return 0;
-}
 /* The Code:4 ends here */
 
 /* [[file:../Readme.org::*Drawing][Drawing:1]] */
@@ -207,10 +193,12 @@ main(int c, char **v){
 
     char ch;
     double u=0.0;
+    if (nodelay(stdscr,TRUE)==ERR){
+        return -1;
+    }
     for(;;){
-        if (kbhit()){
-            ch = getchar();
-
+        ch = getch();
+        if (ch!=ERR){
             if(ch==68){state.a +=30./180*PI;} // nudge left
             if(ch==67){state.a-=30./180*PI;} // nudge right
             if(ch==65){
