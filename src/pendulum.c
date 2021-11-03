@@ -77,7 +77,7 @@ draw(State state,Sys sys,double u){
 
     mvprintw(0,mx-16,"← to nudge left");
     mvprintw(1,mx-16,"→ to nudge right");
-    mvprintw(2,mx-16,"⮠ to restart");
+    mvprintw(2,mx-16,"↵ to restart");
 
 
 
