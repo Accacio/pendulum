@@ -67,7 +67,7 @@ draw(State state,Sys sys,double u){
     double l=sys.l*my/4;
     double ca=cos(state.a);
     double sa=sin(state.a);
-    clear();
+    erase();
 
     mvprintw(0,0,"x=%3.2f m",state.x);
     mvprintw(1,0,"ẋ=%3.2f m/s",state.dx);
