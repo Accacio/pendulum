@@ -7,11 +7,12 @@ Implementation using curses
 - example of controlled ::
 #+HTML:  <p align="center"><a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="80%" title="click to watch" /></a></p>
 * Dependencies
-ncurses
+- ncursesw
+  - libtcc (from https://repo.or.cz/tinycc.git)
 ** installation
 *** Ubuntu
 #+begin_src bash
-sudo apt install libncursesw5-dev libtcc
+sudo apt install libncursesw5-dev
 #+end_src
 * Testing
 To test our code we need to build it, so we use a simple =makefile=
