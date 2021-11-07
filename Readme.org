@@ -8,7 +8,7 @@ Implementation using curses
 #+HTML:  <p align="center"><a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/Accacio/master/img/controlled.svg" width="80%" title="click to watch" /></a></p>
 * Dependencies
 - ncursesw
-  - libtcc (from https://repo.or.cz/tinycc.git)
+- libtcc (from https://repo.or.cz/tinycc.git)
 ** installation
 *** Ubuntu
 #+begin_src bash
