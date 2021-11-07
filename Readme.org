@@ -243,7 +243,7 @@ Here we use a simple Forward Euler to simulate the system. Better integration me
     state->a+=state->da*dt;
 }
 #+end_src
-** Reading the folder
+** Reading the file
 #+begin_src C :tangle src/pendulum.c :main no
 char* get_fileChars(char* source_file){
     FILE *source;

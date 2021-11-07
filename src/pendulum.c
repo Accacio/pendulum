@@ -179,43 +179,43 @@ physics(State * state,Sys sys,double dt,double u) {
 }
 /* Physics Simulation:3 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:1]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:1]] */
 char* get_fileChars(char* source_file){
     FILE *source;
     int fileSize;
     char *fileChars;
-/* Reading the folder:1 ends here */
+/* Reading the file:1 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:2]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:2]] */
     source=fopen(source_file, "r");
     if(!source){
        exit(EXIT_FAILURE) ;
     }
-/* Reading the folder:2 ends here */
+/* Reading the file:2 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:3]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:3]] */
     fseek(source,0,SEEK_END);
     fileSize=ftell(source);
-/* Reading the folder:3 ends here */
+/* Reading the file:3 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:4]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:4]] */
     int newSize=sizeof(char)*(sizeof(postamble)+sizeof(preamble)+fileSize)+1;
     fileChars = (char*) malloc(newSize);
     memset(fileChars, '\0', newSize);
-/* Reading the folder:4 ends here */
+/* Reading the file:4 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:5]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:5]] */
     strncpy(fileChars, preamble,newSize-1);
     fseek(source,0,SEEK_SET);
     fread((char*) fileChars+sizeof(preamble)-1,fileSize,1,source);
     strcat((char*)fileChars,postamble);
-/* Reading the folder:5 ends here */
+/* Reading the file:5 ends here */
 
-/* [[file:../Readme.org::*Reading the folder][Reading the folder:6]] */
+/* [[file:../Readme.org::*Reading the file][Reading the file:6]] */
     fclose(source);
     return (char*) fileChars;
 }
-/* Reading the folder:6 ends here */
+/* Reading the file:6 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:1]] */
 int main(int c, char **v){
