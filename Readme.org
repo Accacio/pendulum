@@ -11,7 +11,7 @@
 Implementation using curses
 - example of controlled ::
 
-#+HTML:  <p align="center"><img src="https://raw.githubusercontent.com/Accacio/pendulum/controlled.gif" width="80%" title="click to watch" /></p>
+#+HTML:  <p align="center"><img src="https://raw.githubusercontent.com/Accacio/pendulum/master/controlled.gif" width="80%" title="click to watch" /></p>
 
 * Dependencies
 - ncursesw
