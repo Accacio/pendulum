@@ -13,7 +13,7 @@ Implementation using curses
 
 #+HTML:  <p align="center"><img src="https://raw.githubusercontent.com/Accacio/pendulum/master/controlled.gif" width="80%" title="click to watch" /></p>
 
-- example changing control without recompiling
+- example changing control without recompiling ::
 
 #+HTML:  <p align="center"><img src="https://raw.githubusercontent.com/Accacio/pendulum/master/recomputing_control.gif" width="80%" title="click to watch" /></p>
 
