@@ -10,7 +10,7 @@
 
 Implementation using curses
 - example of controlled ::
-#+HTML:  <p align="center"><a href="https://asciinema.org/a/375764" target="_blank"><img src="https://raw.githubusercontent.com/Accacio/pendulum/master/controlled.mp4" width="80%" title="click to watch" /></a></p>
+https://raw.githubusercontent.com/Accacio/pendulum/master/controlled.mp4
 
 * Dependencies
 - ncursesw
