@@ -20,6 +20,14 @@ Implementation using curses
 #+begin_src bash
 sudo apt install libncursesw5-dev
 #+end_src
+#+begin_src bash
+git clone https://repo.or.cz/tinycc.git
+cd tinycc
+./configure
+make
+sudo make install
+#+end_src
+
 * Testing
 To test our code we need to build it, so we use a simple =makefile=
 #+begin_src makefile :tangle makefile :results none
