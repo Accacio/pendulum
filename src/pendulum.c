@@ -33,7 +33,7 @@ char preamble[] = "#include <tcclib.h>\n"
   "typedef struct{\n"
   "double x, dx, a, da;\n"
   "} State;\n"
-  "double control(State state,Sys sys,double u)\n"
+  "double control(State state,Sys sys,double u,double t)\n"
   "{\n"
   ;
 /* The Code:4 ends here */
@@ -261,7 +261,7 @@ int main(int c, char **v){
 /* Main Loop:5 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:6]] */
-  double (*control)(State, Sys,double)= 0;
+  double (*control)(State, Sys,double,double)= 0;
 /* Main Loop:6 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:7]] */
@@ -278,7 +278,7 @@ int main(int c, char **v){
 /* Main Loop:7 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:8]] */
-    control = (double (*) (State,Sys,double)) tcc_get_symbol(tccState, "control");
+    control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tccState, "control");
 /* Main Loop:8 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:9]] */
@@ -336,13 +336,13 @@ int main(int c, char **v){
             tcc_set_output_type(tempTccState, TCC_OUTPUT_MEMORY);
             if(tcc_compile_string(tempTccState, fileChars)<0){
               tcc_delete(tempTccState);
-              control = (double (*) (State,Sys,double)) tcc_get_symbol(tccState, "control");
+              control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tccState, "control");
             }
             else
             {
               tcc_delete(tccState);
               tcc_relocate(tempTccState, TCC_RELOCATE_AUTO);
-              control = (double (*) (State,Sys,double)) tcc_get_symbol(tempTccState, "control");
+              control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tempTccState, "control");
               tccState = tempTccState;
             }
             setlocale(LC_ALL, "");
@@ -386,7 +386,8 @@ int main(int c, char **v){
 /* Main Loop:17 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:18]] */
-    u=control(state,sys,u);
+    double time=t.tv_sec;
+    u=control(state,sys,u,time);
     physics(&state,sys,tim(&t),u);
     draw(state,sys,u);
 /* Main Loop:18 ends here */

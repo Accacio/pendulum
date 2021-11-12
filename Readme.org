@@ -87,7 +87,7 @@ char preamble[] = "#include <tcclib.h>\n"
   "typedef struct{\n"
   "double x, dx, a, da;\n"
   "} State;\n"
-  "double control(State state,Sys sys,double u)\n"
+  "double control(State state,Sys sys,double u,double t)\n"
   "{\n"
   ;
 #+end_src
@@ -324,7 +324,7 @@ We configure our inotify watcher
 #+end_src
 We create a function pointer to our control function (not yet defined)
 #+begin_src C :tangle src/pendulum.c :main no
-  double (*control)(State, Sys,double)= 0;
+  double (*control)(State, Sys,double,double)= 0;
 #+end_src
 If not defined, we recover the locale, copy files to memory, create a compile context and compile the code.
 #+begin_src C :tangle src/pendulum.c :main no
@@ -341,7 +341,7 @@ If not defined, we recover the locale, copy files to memory, create a compile co
 #+end_src
 Then we get the definition of the symbol and bind with our function pointer.
 #+begin_src C :tangle src/pendulum.c :main no
-    control = (double (*) (State,Sys,double)) tcc_get_symbol(tccState, "control");
+    control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tccState, "control");
 #+end_src
 Change the locale again (for unicode, it is worth it).
 #+begin_src C :tangle src/pendulum.c :main no
@@ -399,13 +399,13 @@ If it was reread file and recompile
             tcc_set_output_type(tempTccState, TCC_OUTPUT_MEMORY);
             if(tcc_compile_string(tempTccState, fileChars)<0){
               tcc_delete(tempTccState);
-              control = (double (*) (State,Sys,double)) tcc_get_symbol(tccState, "control");
+              control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tccState, "control");
             }
             else
             {
               tcc_delete(tccState);
               tcc_relocate(tempTccState, TCC_RELOCATE_AUTO);
-              control = (double (*) (State,Sys,double)) tcc_get_symbol(tempTccState, "control");
+              control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tempTccState, "control");
               tccState = tempTccState;
             }
             setlocale(LC_ALL, "");
@@ -449,7 +449,8 @@ If a key was pressed, do something
         #+end_src
        Evaluate control function, apply control value to system and finally draw it.
         #+begin_src C :tangle src/pendulum.c :main no
-    u=control(state,sys,u);
+    double time=t.tv_sec;
+    u=control(state,sys,u,time);
     physics(&state,sys,tim(&t),u);
     draw(state,sys,u);
 #+end_src
