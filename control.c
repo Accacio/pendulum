@@ -10,6 +10,8 @@ double M=sys.M;
 double m=sys.m;
 double D=m*l*l*(M+m*(1-ca*ca));
 double d=sys.d;
+/* x=x+sin(t/2); */
+
 if(fabsf(a-PI)<0.9){
     double k[4]={-100.0,-183.2,1683.0,646.6};
     u=(-k[0])*x+(-k[1])*dx+(-k[2])*(a-PI)+(-k[3])*da;
