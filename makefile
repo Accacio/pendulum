@@ -9,7 +9,7 @@ run:
 	@./pendulum
 
 clean:
-	@ if [ -f pendulum ]; then rm pendulum; fi;
+	@rm -f pendulum
 	@echo "Cleaned"
 
 # end
