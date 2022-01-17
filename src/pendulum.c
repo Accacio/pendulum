@@ -219,8 +219,6 @@ char* get_fileChars(char* source_file){
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:1]] */
 int main(int c, char **v){
-  /* lua_State* luaState = luaL_newstate(); */
-  /* luaL_openlibs(luaState); */
 /* Main Loop:1 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:2]] */

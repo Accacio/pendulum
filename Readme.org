@@ -295,8 +295,6 @@ and close the file
 For the main loop
 #+begin_src C :tangle src/pendulum.c :main no
 int main(int c, char **v){
-  /* lua_State* luaState = luaL_newstate(); */
-  /* luaL_openlibs(luaState); */
 #+end_src
 We get the current locale, so we can recover. Developing this I bumped in a bug with tcc where if locale is altered, the points of floats are not read and floats are converted into strings, ignoring decimal part.
 #+begin_src C :tangle src/pendulum.c :main no
@@ -479,4 +477,3 @@ Clean the house.
   return 0;
 }
 #+end_src
-
