@@ -401,7 +401,7 @@ We verify if the control file was modified
         if ( watcher_event->mask & IN_MODIFY )
         {
 #+end_src
-If it was reread file and recompile
+If it was, reread file and recompile
 #+begin_src C :tangle src/pendulum.c :main no
           if (watcher_event->wd==control_watch) {
             setlocale(LC_ALL, locale);
