@@ -4,7 +4,7 @@
 #+latex_header: \usepackage{fontspec}
 #+latex_header:\setmonofont{DejaVu Sans Mono}
 #+latex_header:\definecolor{nord0}{HTML}{2E3440} \definecolor{nord1}{HTML}{3B4252} \definecolor{nord2}{HTML}{434C5E} \definecolor{nord3}{HTML}{4C566A} \definecolor{nord4}{HTML}{D8DEE9} \definecolor{nord5}{HTML}{E5E9F0} \definecolor{nord6}{HTML}{ECEFF4} \definecolor{nord7}{HTML}{8FBCBB} \definecolor{nord8}{HTML}{88C0D0} \definecolor{nord9}{HTML}{81A1C1} \definecolor{nord10}{HTML}{5E81AC} \definecolor{nord11}{HTML}{BF616A} \definecolor{nord12}{HTML}{D08770} \definecolor{nord13}{HTML}{EBCB8B} \definecolor{nord14}{HTML}{A3BE8C} \definecolor{nord15}{HTML}{B48EAD}
-#+latex_header:\lstset{basicstyle=\ttfamily\color{nord4},backgroundcolor=\color{nord1},keywordstyle=\color{nord10},identifierstyle=\color{nord7},commentstyle=\color{nord3!0.2!gray},flexiblecolumns=true,stringstyle=\color{nord14},breaklines=false,linewidth=1.2\linewidth,xleftmargin=-1cm,showstringspaces=false,keepspaces=true,showtabs=true,tabsize=2}
+#+latex_header: \lstset{basicstyle=\ttfamily\color{nord4},backgroundcolor=\color{nord1},keywordstyle=\color{nord10},identifierstyle=\color{nord7},commentstyle=\color{nord3!0.2!gray},flexiblecolumns=true,stringstyle=\color{nord14},breaklines=true,linewidth=\linewidth,xleftmargin=-1cm,showstringspaces=false,keepspaces=true,showtabs=true,tabsize=2}
 
 #+HTML: <p align="center"><a href="https://zenodo.org/badge/latestdoi/316294231"><img src="https://zenodo.org/badge/316294231.svg" alt="DOI"></a></p>
 
