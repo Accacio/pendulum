@@ -272,7 +272,7 @@ int main(int c, char **v){
       exit(EXIT_FAILURE);
     };
     free(fileChars);
-    tcc_relocate(tccState, TCC_RELOCATE_AUTO);
+    tcc_relocate(tccState);
 /* Main Loop:7 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:8]] */
@@ -339,7 +339,7 @@ int main(int c, char **v){
             else
             {
               tcc_delete(tccState);
-              tcc_relocate(tempTccState, TCC_RELOCATE_AUTO);
+              tcc_relocate(tempTccState);
               control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tempTccState, "control");
               tccState = tempTccState;
             }

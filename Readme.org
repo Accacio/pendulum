@@ -348,7 +348,7 @@ If not defined, we recover the locale, copy files to memory, create a compile co
       exit(EXIT_FAILURE);
     };
     free(fileChars);
-    tcc_relocate(tccState, TCC_RELOCATE_AUTO);
+    tcc_relocate(tccState);
 #+end_src
 Then we get the definition of the symbol and bind with our function pointer.
 #+begin_src C :tangle src/pendulum.c :main no
@@ -415,7 +415,7 @@ If it was, reread file and recompile
             else
             {
               tcc_delete(tccState);
-              tcc_relocate(tempTccState, TCC_RELOCATE_AUTO);
+              tcc_relocate(tempTccState);
               control = (double (*) (State,Sys,double,double)) tcc_get_symbol(tempTccState, "control");
               tccState = tempTccState;
             }
