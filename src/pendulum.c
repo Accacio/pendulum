@@ -356,30 +356,52 @@ int main(int c, char **v){
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:17]] */
     if (ch!=ERR){
-      if(ch==68){state.dx-=1;} // nudge left
-      if(ch==67){state.dx+=1;} // nudge right
-      if(ch==65){
-        u=0;
-        sInit[0] =0;
-        sInit[1] =0;
-        sInit[2] =160./180*PI;
-        sInit[3] =0;
-      }
-      if(ch==66){
-        sInit[0] =-1.5;
-        sInit[1] =0;
-        sInit[2] =20.0/180*PI;
-        sInit[3] =0;
-      }
-      if(ch==10){
-        u=0;
-        state.x =sInit[0];
-        state.dx =sInit[1];
-        state.a =sInit[2];
-        state.da =sInit[3];
-      } // Restart
-      if(ch==113){
-        break;
+      curch = ch;
+      switch (ch) {
+        case 68: // nudge left
+          state.da-=1;
+          break;
+        case 67: // nudge right
+          state.da+=1;
+          break;
+        case 65:
+          u=0;
+          sInit[0] =0;
+          sInit[1] =0;
+          sInit[2] =160./180*PI;
+          sInit[3] =0;
+          break;
+        case 'd':
+          sInit[0] =0.;
+          sInit[1] =0.;
+          sInit[2] =00.0/180*PI;
+          sInit[3] =0.;
+          break;
+        case 'u':
+          sInit[0] =0.;
+          sInit[1] =0.;
+          sInit[2] =180.0/180*PI;
+          sInit[3] =0.;
+          break;
+        case 66: //
+          sInit[0] =-1.5;
+          sInit[1] =0;
+          sInit[2] =30.0/180*PI;
+          sInit[3] =0;
+          break;
+        case 10: // Restart
+        case 'r':
+          u=0;
+          state.x =sInit[0];
+          state.dx =sInit[1];
+          state.a =sInit[2];
+          state.da =sInit[3];
+          break;
+        case 'q':
+          goto exit;
+          break;
+        default:
+          break;
       }
     }
 /* Main Loop:17 ends here */
@@ -398,6 +420,7 @@ int main(int c, char **v){
 /* Main Loop:19 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:20]] */
+  exit:
   tcc_delete(tccState);
   endwin();
   return 0;
