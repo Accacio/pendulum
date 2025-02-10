@@ -20,6 +20,10 @@ else{
     double k[4]={20.0,0.0,-10,-10};
     double Wr=2*m*g*l;
     double W=m*l*l/2*da*da/2+m*g*l*(ca+1);
-    u=2.*(W-Wr)*(da*ca>0?-1:1);
+    if(W>0.5*Wr) {
+      u=0;
+    } else {
+      u=4.*(W-Wr)*(da*ca>0?-1:1);
+    };
 }
 /* u=0; */
