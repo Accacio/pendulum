@@ -300,6 +300,7 @@ int main(int c, char **v){
   curs_set(0);
 
   char ch;
+  char curch;
   double u=0.0;
 /* Main Loop:12 ends here */
 
@@ -388,6 +389,7 @@ int main(int c, char **v){
     u=control(state,sys,u,time);
     physics(&state,sys,tim(&t),u);
     draw(state,sys,u);
+    /* mvprintw(10,3,"%d\n",curch); */
 /* Main Loop:18 ends here */
 
 /* [[file:../Readme.org::*Main Loop][Main Loop:19]] */
