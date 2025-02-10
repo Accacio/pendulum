@@ -376,6 +376,7 @@ And also ncurses
   curs_set(0);
 
   char ch;
+  char curch;
   double u=0.0;
 #+end_src
 Set getch to nodelay, so if no key is pressed the system can continue.
@@ -427,34 +428,56 @@ If it was, reread file and recompile
     }
 
     ch = getch();
-        #+end_src
+#+end_src
 If a key was pressed, do something
 #+begin_src C :tangle src/pendulum.c :main no
     if (ch!=ERR){
-      if(ch==68){state.dx-=1;} // nudge left
-      if(ch==67){state.dx+=1;} // nudge right
-      if(ch==65){
-        u=0;
-        sInit[0] =0;
-        sInit[1] =0;
-        sInit[2] =160./180*PI;
-        sInit[3] =0;
-      }
-      if(ch==66){
-        sInit[0] =-1.5;
-        sInit[1] =0;
-        sInit[2] =20.0/180*PI;
-        sInit[3] =0;
-      }
-      if(ch==10){
-        u=0;
-        state.x =sInit[0];
-        state.dx =sInit[1];
-        state.a =sInit[2];
-        state.da =sInit[3];
-      } // Restart
-      if(ch==113){
-        break;
+      curch = ch;
+      switch (ch) {
+        case 68: // nudge left
+          state.da-=1;
+          break;
+        case 67: // nudge right
+          state.da+=1;
+          break;
+        case 65:
+          u=0;
+          sInit[0] =0;
+          sInit[1] =0;
+          sInit[2] =160./180*PI;
+          sInit[3] =0;
+          break;
+        case 'd':
+          sInit[0] =0.;
+          sInit[1] =0.;
+          sInit[2] =00.0/180*PI;
+          sInit[3] =0.;
+          break;
+        case 'u':
+          sInit[0] =0.;
+          sInit[1] =0.;
+          sInit[2] =180.0/180*PI;
+          sInit[3] =0.;
+          break;
+        case 66: //
+          sInit[0] =-1.5;
+          sInit[1] =0;
+          sInit[2] =30.0/180*PI;
+          sInit[3] =0;
+          break;
+        case 10: // Restart
+        case 'r':
+          u=0;
+          state.x =sInit[0];
+          state.dx =sInit[1];
+          state.a =sInit[2];
+          state.da =sInit[3];
+          break;
+        case 'q':
+          goto exit;
+          break;
+        default:
+          break;
       }
     }
         #+end_src
@@ -464,6 +487,7 @@ If a key was pressed, do something
     u=control(state,sys,u,time);
     physics(&state,sys,tim(&t),u);
     draw(state,sys,u);
+    /* mvprintw(10,3,"%d\n",curch); */
 #+end_src
 Sleep the the sleep of the just
 #+begin_src C :tangle src/pendulum.c :main no
@@ -472,6 +496,7 @@ Sleep the the sleep of the just
 #+end_src
 Clean the house.
 #+begin_src C :tangle src/pendulum.c :main no
+  exit:
   tcc_delete(tccState);
   endwin();
   return 0;
